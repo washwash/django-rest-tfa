@@ -1,0 +1,2 @@
+Your Verification Code is: {{ token }}
+The code can be used only once.

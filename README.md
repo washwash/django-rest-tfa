@@ -31,7 +31,7 @@ MIDDLEWARE = [
 
 * Then define supported types
 ```
-DRF_TFA_ENABLED_AUTH_TYPES = [
+TFA_ENABLED_AUTH_TYPES = [
     'email',
 ]
 ```
@@ -45,8 +45,8 @@ urlpatterns = [
 
 * Configure ages of client or token
 ```
-DRF_TFA_CLIENT_AGE = 1209600  # 2 weeks
-DRF_TFA_TOKEN_AGE = 3600  # 60 min
+TFA_CLIENT_AGE = 1209600  # 2 weeks
+TFA_TOKEN_AGE = 3600  # 60 min
 ```
 
 * And name the base identifiers
@@ -67,16 +67,16 @@ Device is a second factor that the User has and must be associated with User thr
 literally a parsed string from the User Agent HTTP header and represented as name of defined Device.
 Every Device should be confirmed and activated by the User with accepting challenges. 
 
-TFA lib watches user's Client and tries to create a Challenge for the User 
-if the User does not have active Challenge.
-The Challenge is an event when TFA defines a new Device, sends an email (for example)
+TFA lib watches user's Client and offers to create a new one Challenge 
+if the User does not have active one.
+The Challenge is an event that new Device is defined, sends an email (for example)
 with OTP code and waits for a User's attempts to accept the challenge.
 
 The User has only 3 attempts to take it up. 
 The Device will be confirmed if the User has the Device and enters the correct code.   
 
 After that the User will enjoy the UI while the Device is alive.
-The Device lifetime is declared in settings.DRF_TFA_CLIENT_AGE.
+The Device lifetime is declared in settings.TFA_CLIENT_AGE.
 
 Here is a simple diagram: 
 ```
@@ -92,8 +92,10 @@ Here is a simple diagram:
  |                   |                   |                    |
  |                   |          if user doesn't have          |
  |                   |          an active challege:           |
- |                   |                   |send the challenge  |
- |                   |                   |------------------->|
+ |                   |redirect 303       |                    |
+ |                   |with LOCATION      |                    |
+ |                   |/create_challenge/ |                    |
+ |                   |<------------------|                    |
  |                   |                 else:                  |
  |                   |redirect 303       |                    |
  |                   |with LOCATION      |                    |
@@ -108,7 +110,7 @@ Here is a simple diagram:
  |                   |                   |                    |<--|
  |enter the code     |                   |                    |
  |------------------>|                   |                    |
- |                   |POST auth/tfa/email|                    |
+ |                   |POST auth/tfa      |                    |
  |                   |/accept_challenge/ |                    |
  |                   |------------------>|process the OTP code|
  |                   |                   |---|                |
@@ -146,8 +148,10 @@ it has to create a new challenge:
  |create a new       |                   |                    |
  |challenge          |                   |                    |
  |------------------>|                   |                    |
- |                   |POST auth/tfa/email|                    |
+ |                   |POST auth/tfa      |                    |
  |                   |/create_challenge/ |                    |
+ |                   |with type in       |                    |
+ |                   |request data       |                    |
  |                   |------------------>|process new code    |
  |                   |                   |---|                |
  |                   |                   |<--|                |
