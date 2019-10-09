@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "djano-rest-tfa"
+version = "0.1.0"
+description = "Django REST Two Factor Auth"
+
+authors = ["Andrey Gordeev <gordeev.and.and@gmail.com>"]
+
+readme = "README.md"
+include = ["CHANGELOG"]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+django = "^2"
+djangorestframework = "^3"
+django-ipware = "^2.1.0"
+django-user-agents = "^0.3.2"
+django-otp = "^0.4.3"
+
+[tool.poetry.dev-dependencies]
+django-configurations = "^2.1"
+pytest-django = "^3.4"
+pytest-pythonpath = "^0.7.3"
+mock = "^1.0.1"
+freezegun = "^0.3.7"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
